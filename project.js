@@ -36,7 +36,24 @@ const getNumberOfLines = () =>{
             return numberOfLines;
         }
     }
+};
+
+//3. collect a bet amount(basd on the balance of the user)
+const getBet = (balance,lines)=>{ //bet is distributed among multiple lines
+    while(true) {
+        const bet = prompt("Enter the total bet per line: ")//prompt like print
+        const numberBet = parseFloat(bet); //convert the bet amount into int or floating point value
+
+        if (isNaN(numberBet)|| numberBet<=0 || numberBet > balance/lines){ //isNaN-this func say "is not a number?"
+            console.log("Invalid bet, try again.")
+        }else{
+            return numberBet;
+        }
+    }
 }
+
+
  //must define before i call the funcs
-const depositAmount=deposit();
+let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
 const numberOfLines=getNumberOfLines();
+const bet=getBet(balance, numberOfLines);
