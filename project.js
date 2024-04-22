@@ -71,7 +71,7 @@ const getBet = (balance,lines)=>{ //bet is distributed among multiple lines
             return numberBet;
         }
     }
-}
+};
 
 //4. spin the slot machine
 const spin =()=>{
@@ -132,6 +132,28 @@ const printRows =(rows)=>{
     }
 };
 
+//5. check if the user won
+const getWinnings=(rows, bet, lines) => {
+    let winnings=0;
+
+    for (let row=0; row < lines; row++){ // if the line is 1 , we only going to look at the row 1, if lines is 3, then we look for all the rows
+        const symbols = rows[row];
+        let allSame= true;
+
+        for (const symbol of symbols){
+            if(symbol != symbols[0]){// we gonna compare with the fisrt symbol always
+                allSame=false;
+                break;// finish iterating
+            }
+        }
+
+        if(allSame){
+            winnings+= bet* SYMBOL_VALUES[symbols[0]]// in this case we know all symbols are the same ,so we can consider the 1st symbol
+        }
+    }
+    return winnings;
+}
+
 //must define before i call the funcs
 let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
 const numberOfLines=getNumberOfLines();
@@ -139,3 +161,5 @@ const bet=getBet(balance, numberOfLines);
 const reels=spin();
 const rows=transpose(reels);
 printRows(rows);
+const winnings=getWinnings(rows,bet,numberOfLines)
+console.log("You won, $" + winnings.toString())
