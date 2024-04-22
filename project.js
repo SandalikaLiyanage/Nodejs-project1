@@ -84,8 +84,9 @@ const spin =()=>{
         }
     }
     
-    const reels=[[], [], []];//arrays inside of an array(each array represents a column in our slot machine)
+    const reels=[];//arrays inside of an array(each array represents a column in our slot machine)
     for(let i=0;i<COLS; i++){//each reel or colun
+        reels.push([]);
         const reelSymbols=[...symbols];//we need a copy of the array we made as we remove symboles after choosing
         for (let j=0;j<ROWS;j++){//row in each column
             const randomIndex=Math.floor(Math.random() *reelSymbols.length);//randomly select elements  (Math.floor- round-down to the nearest whole number)
@@ -97,11 +98,30 @@ const spin =()=>{
     return reels;
 };
 
+//Our reels are initially looks like this
+//   C1        C2       C3
+//[[A,B,C], [D,D,D], [A,A,A]]
+// So we need to transpose our array to be vertial
+//[A D A]
+//[B D A]
+//[C D A]
+const transpose =(reels)=>{
+    const rows = [];
 
+    for(let i=0; i <ROWS; i++){
+        rows.push([])
+        for(let j=0; j<COLS; j++){
+            rows[i].push(reels[j][i])
+        }
+    }
+    return rows;
+} 
 
- //must define before i call the funcs
- const reels=spin();
- console.log(reels);
+//must define before i call the funcs
 let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
 const numberOfLines=getNumberOfLines();
 const bet=getBet(balance, numberOfLines);
+const reels=spin();
+const rows=transpose(reels);
+console.log(reels)
+console.log(rows)
