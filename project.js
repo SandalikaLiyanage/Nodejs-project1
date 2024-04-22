@@ -7,6 +7,7 @@
 //6. give the user their winnings
 //7. play again
 
+//to get node running- type-> npm init, next type->npm i prompt-sync
 
 //user will enter a certain amount(using the package we made)
 //import that package(json) of getting user inputs
@@ -154,12 +155,36 @@ const getWinnings=(rows, bet, lines) => {
     return winnings;
 }
 
+
 //must define before i call the funcs
-let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
-const numberOfLines=getNumberOfLines();
-const bet=getBet(balance, numberOfLines);
-const reels=spin();
-const rows=transpose(reels);
-printRows(rows);
-const winnings=getWinnings(rows,bet,numberOfLines)
-console.log("You won, $" + winnings.toString())
+const game =()=>{
+ //must define before i call the funcs
+    let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
+    
+    while(true){
+    console.log("You have a balance of $" + balance);
+    const numberOfLines=getNumberOfLines();
+    const bet=getBet(balance, numberOfLines);
+
+    balance-= bet*numberOfLines;
+
+    const reels=spin();
+    const rows=transpose(reels);
+    printRows(rows);
+    const winnings=getWinnings(rows,bet,numberOfLines)
+    // give the user their winnings
+    balance+=winnings;
+    console.log("You won, $" + winnings.toString());
+    
+    //play again or not
+        if(balance<=0){
+            console.log("You ran out of money!");
+            break;
+        }
+        const playAgain =prompt("Do you want to play again (y/n)?")
+        if (playAgain !="y") break;
+    }
+};
+
+game();
+
