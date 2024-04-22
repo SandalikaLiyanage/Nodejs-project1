@@ -101,7 +101,7 @@ const spin =()=>{
 //Our reels are initially looks like this
 //   C1        C2       C3
 //[[A,B,C], [D,D,D], [A,A,A]]
-// So we need to transpose our array to be vertial
+// So we need to transpose our array to be vertical
 //[A D A]
 //[B D A]
 //[C D A]
@@ -115,7 +115,22 @@ const transpose =(reels)=>{
         }
     }
     return rows;
-} 
+};
+
+//show the slot machine reels to the user in a styled way
+//A | B | C
+const printRows =(rows)=>{
+    for (const row of rows){
+        let rowString = "";
+        for( const [i, symbol] of row.entries()) {
+            rowString+=symbol
+            if(i!= row.length-1){
+                rowString+=" | "
+            }
+        }
+        console.log(rowString)
+    }
+};
 
 //must define before i call the funcs
 let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
@@ -123,5 +138,4 @@ const numberOfLines=getNumberOfLines();
 const bet=getBet(balance, numberOfLines);
 const reels=spin();
 const rows=transpose(reels);
-console.log(reels)
-console.log(rows)
+printRows(rows);
