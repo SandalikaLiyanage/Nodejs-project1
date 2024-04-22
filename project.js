@@ -7,10 +7,31 @@
 //6. give the user their winnings
 //7. play again
 
-//1. deposit some money
- //user will enter a certain amount(using the package we made)
- //import that package of getting user inputs
+
+//user will enter a certain amount(using the package we made)
+//import that package(json) of getting user inputs
 const prompt = require("prompt-sync")(); //this () at the end,will give you access to the func where we get user inputs
+
+//define number of rows ,columns(reels) and symbols(frequency and value of each) in the slot machine
+//let's make global variables for that. They normally go in the top of the program bcs easy to see and change
+const ROWS = 3; //const variables are in capital
+const COLS = 3;
+
+const SYMBOLS_COUNT = {
+    A:2, //SYMBOLS_COUNT["A"] ->2
+    B:4,
+    C:6,
+    D:8
+}
+
+const SYMBOL_VALUES = {
+    A:5,
+    B:4,
+    C:3,
+    D:2
+}
+
+//1. deposit some money
 const deposit = () =>{
    while(true) {
         const depositAmount = prompt("Enter a deposit amount: ")//prompt like print
@@ -52,8 +73,35 @@ const getBet = (balance,lines)=>{ //bet is distributed among multiple lines
     }
 }
 
+//4. spin the slot machine
+const spin =()=>{
+    //generate the reels or the columns
+    // fist add those symbols and thier count to a list or a array and randomly select from it while removing the one that chose
+    const symbols=[];
+    for(const[symbol,count] of Object.entries(SYMBOLS_COUNT)){
+        for(let i=0; i<count ;i++){
+            symbols.push(symbol);
+        }
+    }
+    
+    const reels=[[], [], []];//arrays inside of an array(each array represents a column in our slot machine)
+    for(let i=0;i<COLS; i++){//each reel or colun
+        const reelSymbols=[...symbols];//we need a copy of the array we made as we remove symboles after choosing
+        for (let j=0;j<ROWS;j++){//row in each column
+            const randomIndex=Math.floor(Math.random() *reelSymbols.length);//randomly select elements  (Math.floor- round-down to the nearest whole number)
+            const selectedSymbol= reelSymbols[randomIndex];
+            reels[i].push(selectedSymbol);
+            reelSymbols.splice(randomIndex,1);//we remove that symbol (1 by 1)so we don't select it again
+        }
+    }
+    return reels;
+};
+
+
 
  //must define before i call the funcs
+ const reels=spin();
+ console.log(reels);
 let balance=deposit();//starting balance is equal to the amount they deposited (let-agjust the value of the variable , not like const)
 const numberOfLines=getNumberOfLines();
 const bet=getBet(balance, numberOfLines);
